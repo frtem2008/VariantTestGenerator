@@ -1,0 +1,33 @@
+<variants>
+    #сколько нужно
+    variantcount=6
+    #сколько вопросов в варианте
+    questioncount=2
+</variants>
+
+
+<questions>
+    <1>
+    Good?&
+        1]Good
+        2]Bad
+    </1>
+
+     <2>
+     Bad?&
+        1]Good
+        2]Bad
+     </2>
+
+     <3>
+        Назовите чела с членом, сколько их? почему так?&
+        1]Их нет
+        2]Это Дима
+     </3>
+
+     <4>
+        PWBad?&
+            1]PWGood
+            2]PWBad
+     </4>
+</questions>
