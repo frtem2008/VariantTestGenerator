@@ -10,16 +10,29 @@ public class GuiManager {
     private final JFrame frame;
     private final ArrayList<ComponentState> states;
     private final ArrayList<JComponent> active;
-    private int state = 1;
+    private final String stateInfo;
+
+    private int state;
 
     public GuiManager(JFrame frame) {
         this.frame = frame;
         states = new ArrayList<>();
         active = new ArrayList<>();
+        stateInfo = "State info hasn't been set";
+    }
+
+    public GuiManager(JFrame frame, String stateInfo) {
+        this.frame = frame;
+        states = new ArrayList<>();
+        active = new ArrayList<>();
+        this.stateInfo = stateInfo;
+    }
+
+    public String getStateInfo() {
+        return stateInfo;
     }
 
     private void updateStates() {
-        System.out.println(state);
         active.clear();
 
         for (int i = 0; i < states.size(); i++) {
@@ -27,7 +40,6 @@ public class GuiManager {
         }
 
         for (int i = 0; i < states.size(); i++) {
-
             if (contains(states.get(i).states(), state)) {
                 active.add(states.get(i).component());
             }
@@ -46,6 +58,30 @@ public class GuiManager {
         return false;
     }
 
+    public void removeFromStates(JComponent component, int[] state) {
+        for (int i = 0; i < state.length; i++) {
+            removeFromState(component, state[i]);
+        }
+    }
+
+    public void removeFromState(JComponent component, int state) {
+        for (int i = 0; i < states.size(); i++) {
+            if (states.get(i).component().equals(component)) {
+                if (contains(states.get(i).states(), state)) {
+                    int[] newStates = new int[states.get(i).states().length - 1];
+                    for (int j = 0; j < newStates.length; j++) {
+                        if (states.get(i).states()[j] != state) {
+                            newStates[j] = states.get(i).states()[j];
+                        }
+                    }
+                    states.remove(i);
+                    states.add(new ComponentState(component, newStates));
+                    break;
+                }
+            }
+        }
+    }
+
     public int getState() {
         return state;
     }
@@ -57,6 +93,7 @@ public class GuiManager {
 
     public JLabel createJLabel(String text, Rectangle bounds, Font font, int... visibleStates) {
         JLabel label = new JLabel(text);
+        label.setName(text);
         label.setBounds(bounds);
         label.setFont(font);
         frame.add(label);
@@ -68,6 +105,7 @@ public class GuiManager {
 
     public JTextField createJTextField(Rectangle bounds, Font font, int... visibleStates) {
         JTextField field = new JTextField();
+        field.setName(bounds.toString());
         field.setBounds(bounds);
         field.setFont(font);
         frame.add(field);
@@ -79,6 +117,7 @@ public class GuiManager {
 
     public JButton createJButton(String text, Rectangle bounds, ActionListener actionListener, int... visibleStates) {
         JButton button = new JButton(text);
+        button.setName(text);
         button.setBounds(bounds);
         button.addActionListener(actionListener);
         frame.add(button);
